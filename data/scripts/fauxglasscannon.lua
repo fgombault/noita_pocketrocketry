@@ -30,6 +30,8 @@ function shot(entity_id)
 			local lifetime = ComponentGetValue2(projectile, "lifetime")
 			if (lifetime ~= -1) then
 				lifetime = math.floor(lifetime * lifetimemodifier)
+				-- pseudo wisps, is it a bad idea?
+				if (lifetime <= -2 and lifetime >= -5) then lifetime = 2000 end
 				ComponentSetValue2(projectile, "lifetime", lifetime)
 			end
 
