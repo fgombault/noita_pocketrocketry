@@ -1,0 +1,5 @@
+- [ ] 🔴config menu
+- [x] ❓also affect projectile speed
+- [ ] 🟡funny wand renaming
+- [x] seed in wand signature
+- [x] pseudo wisps
