@@ -1,3 +1,30 @@
+function getWandInfo(entity)
+    local ability_comp = EntityGetFirstComponentIncludingDisabled(entity, "AbilityComponent")
+    local wand_info = {}
+    if ability_comp then
+        -- print("yep, seems like a wand")
+        local shuffle = ComponentObjectGetValue2(ability_comp, "gun_config", "shuffle_deck_when_empty")
+        wand_info[0] = 0
+        if shuffle then wand_info[0] = 1 end
+        wand_info[1] = ComponentObjectGetValue2(ability_comp, "gun_config", "actions_per_round")
+        wand_info[2] = ComponentObjectGetValue2(ability_comp, "gunaction_config", "fire_rate_wait")
+        wand_info[3] = ComponentObjectGetValue2(ability_comp, "gun_config", "reload_time")
+        wand_info[4] = ComponentGetValue2(ability_comp, "mana_max")
+        wand_info[5] = ComponentGetValue2(ability_comp, "mana_charge_speed")
+        wand_info[6] = ComponentObjectGetValue2(ability_comp, "gun_config", "deck_capacity")
+        wand_info[7] = ComponentObjectGetValue2(ability_comp, "gunaction_config", "spread_degrees")
+    end
+    return wand_info
+end
+
+function fnv1a_hash(table)
+    local hash = 2166136261
+    for i = 1, #table do
+        hash = bit.bxor(hash, table[i])
+        hash = bit.band(hash * 16777619, 0xffffffff)
+    end
+    return hash
+end
 
 function getCurrentlyEquippedWandId()
     local i2c_id = EntityGetFirstComponentIncludingDisabled(getPlayerEntity(), "Inventory2Component")
@@ -10,15 +37,30 @@ function getCurrentlyEquippedWandId()
     end
 end
 
-function getPlayerEntity()
-	local players = EntityGetWithTag("player_unit")
-	if #players == 0 then return end
-
-	return players[1]
+function getCurrentlyEquippedWandHash()
+    local wand_id = getCurrentlyEquippedWandId()
+    if (wand_id ~= nil and wand_id > 0) then
+        local tab = getWandInfo(wand_id)
+        if (tab) then
+            return fnv1a_hash(tab)
+        end
+    end
+    return -1
 end
 
-function testCallback()
-		print("test output message")
+function getPlayerEntity()
+    local players = EntityGetWithTag("player_unit")
+    if #players == 0 then return end
+    return players[1]
+end
+
+function getCurrentlyEquippedWandKaboom()
+	local signature = getInternalVariableValue(getPlayerEntity(), "held_wand_hash", "value_int")
+  local seed = tonumber(StatsGetValue("world_seed"))
+	SetRandomSeed(signature, seed)
+	local explosionmodifier = RandomDistributionf(0.3, 3, 1)
+	-- local explosionmodifier = Randomf(0.5, 2)
+	return explosionmodifier
 end
 
 function addNewInternalVariable(entity_id, variable_name, variable_type, initial_value)

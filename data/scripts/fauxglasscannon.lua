@@ -3,12 +3,8 @@ dofile_once("mods/pocketrocketry/data/scripts/helper.lua")
 dofile_once("mods/pocketrocketry/config.lua")
 
 
-function shot( entity_id )
-	local explosionmodifier = getInternalVariableValue(getPlayerEntity(), "held_wand_id", "value_int")
-	SetRandomSeed(explosionmodifier, explosionmodifier)
---	explosionmodifier = RandomDistributionf(0.3, 3, 1.3)
-	explosionmodifier = Randomf(0.3, 3)
-	
+function shot(entity_id)
+	local explosionmodifier = getCurrentlyEquippedWandKaboom()
 	local damagemodifier = 1
 	if modify_damage_values_too == 1 then
 		damagemodifier = explosionmodifier
