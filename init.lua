@@ -10,25 +10,14 @@ function OnWorldInitialized()
 end
 
 function OnPlayerSpawned(player)
-	if (getInternalVariableValue(player, "held_wand_id", "value_int") == nil) then
-		addNewInternalVariable(player, "held_wand_id", "value_int", 1)
-		addNewLuaCallback(player, "on_projectile_shot", "mods/pocketrocketry/data/scripts/playershotlistener.lua", 10, false, "playershotlistener")
-		EntityAddComponent( player, "LuaComponent", 
-				{ 
-					script_shot = "mods/pocketrocketry/data/scripts/fauxglasscannon.lua",
-					execute_every_n_frame = "-1",
-				} )
+	if (getInternalVariableValue(player, "held_wand_hash", "value_int") == nil) then
+		addNewInternalVariable(player, "held_wand_hash", "value_int", 1)
+		addNewLuaCallback(player, "on_projectile_shot", "mods/pocketrocketry/data/scripts/playershotlistener.lua", 10, false,
+			"playershotlistener")
+		EntityAddComponent(player, "LuaComponent",
+			{
+				script_shot = "mods/pocketrocketry/data/scripts/fauxglasscannon.lua",
+				execute_every_n_frame = "-1",
+			})
 	end
 end
-
-
---function OnMagicNumbersAndWorldSeedInitialized()
---	addNewInternalVariable(getPlayerEntity(), "held_wand_id", "value_int", 1)
---	addNewLuaCallback(player, "on_projectile_shot", "mods/pocketrocketry/data/scripts/testmessage.lua", 10, false, "testmessage")
---	EntityAddComponent(getPlayerEntity(), "LuaComponent", 
---			{ 
---				script_shot = "mods/pocketrocketry/data/scripts/fauxglasscannon.lua",
---				execute_every_n_frame = "-1",
---			} )
---end
-	
