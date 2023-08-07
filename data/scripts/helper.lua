@@ -28,13 +28,12 @@ end
 
 function getCurrentlyEquippedWandId()
     local i2c_id = EntityGetFirstComponentIncludingDisabled(getPlayerEntity(), "Inventory2Component")
-    local wand_id = ComponentGetValue2( i2c_id, "mActiveItem" )
-    
-    if(EntityHasTag(wand_id, "wand")) then
+    local wand_id = ComponentGetValue2(i2c_id, "mActualActiveItem")
+
+    if (EntityHasTag(wand_id, "wand")) then
         return wand_id
-    else
-        return -1
     end
+    return nil
 end
 
 function getCurrentlyEquippedWandHash()
