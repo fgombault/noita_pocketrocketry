@@ -12,11 +12,14 @@ function shot(entity_id)
 		damagemodifier = 1 / explosionmodifier
 	end
 	local lifetimemodifier = 1
+	local speedmodifier = 1
 	if (modify_lifetime_values_too > 0) then
 		lifetimemodifier = explosionmodifier
 	elseif (modify_lifetime_values_too < 0) then
 		lifetimemodifier = 1 / explosionmodifier
 	end
+	-- TODO: this has to be configurable?
+	speedmodifier = lifetimemodifier
 
 	-- print("shot explosion modifier:" .. explosionmodifier)
 
@@ -34,6 +37,12 @@ function shot(entity_id)
 				if (lifetime <= -2 and lifetime >= -5) then lifetime = 2000 end
 				ComponentSetValue2(projectile, "lifetime", lifetime)
 			end
+			local speed_min = ComponentGetValue2(projectile, "speed_min")
+			speed_min = speed_min * speedmodifier
+			ComponentSetValue2(projectile, "speed_min", speed_min)
+			local speed_max = ComponentGetValue2(projectile, "speed_max")
+			speed_max = speed_max * speedmodifier
+			ComponentSetValue2(projectile, "speed_max", speed_max)
 
 			local dtypes = { "projectile", "explosion", "melee", "ice", "slice", "electricity", "radioactive", "drill", "fire" }
 			local damage_by_types = ComponentObjectGetMembers(projectile, "damage_by_type") or {};
