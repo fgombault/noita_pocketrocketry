@@ -5,6 +5,13 @@ dofile_once("mods/pocketrocketry/config.lua")
 
 function shot(entity_id)
 	local explosionmodifier = getCurrentlyEquippedWandKaboom()
+
+	local wand_id = getCurrentlyEquippedWandId()
+	if (true and wand_id ~= nil and wand_id > 0) then
+		local name = getNameForKaboom(explosionmodifier)
+		RenameWand(wand_id, name)
+	end
+
 	local damagemodifier = 1
 	if (modify_damage_values_too > 0) then
 		damagemodifier = explosionmodifier

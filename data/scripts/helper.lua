@@ -112,3 +112,32 @@ function setInternalVariableValue(entity_id, variable_name, variable_type, new_v
     end
 end
 
+function RenameWand(wand, new_name)
+    local item_component = EntityGetFirstComponentIncludingDisabled(wand, "ItemComponent")
+    local info_component = EntityGetFirstComponentIncludingDisabled(wand, "UIInfoComponent")
+    local potion_component = EntityGetFirstComponentIncludingDisabled(wand, "PotionComponent")
+
+    if item_component == nil or item_component == 0 then return end
+    if potion_component ~= nil and potion_component ~= 0 then return end
+
+    local name = ComponentGetValue2(item_component, "item_name") or ""
+
+    if (new_name == nil or new_name == "") then return end
+    if string.lower(new_name) == string.lower(name) then return end
+
+    ComponentSetValue2(item_component, "item_name", new_name)
+
+    local uses_item_name = ComponentGetValue2(item_component, "always_use_item_name_in_ui")
+    if not uses_item_name then
+        ComponentSetValue2(item_component, "always_use_item_name_in_ui", true)
+    end
+
+    if info_component ~= 0 and info_component ~= nil then
+        ComponentSetValue2(info_component, "name", new_name)
+    end
+		-- print("renamed wand: " .. name)
+end
+
+function getNameForKaboom(kaboom)
+  return "" .. kaboom
+end
