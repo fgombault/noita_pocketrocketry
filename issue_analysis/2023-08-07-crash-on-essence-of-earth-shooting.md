@@ -32,7 +32,7 @@ When Essence of Earth started shooting, the game crashed hard.
 
 ## Action to learn or to foolproof
 
-foolprofing: remove these two functions from the linter whitelist, and all
+foolproofing: remove these two functions from the linter whitelist, and all
 other deprecated functions to get editor warnings.
 ✅ done on 2023-08-07
 
