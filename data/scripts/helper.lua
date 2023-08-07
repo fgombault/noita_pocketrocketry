@@ -89,11 +89,11 @@ end
 
 function getInternalVariableValue(entity_id, variable_name, variable_type)
     local value = nil
-    local components = EntityGetComponent( entity_id, "VariableStorageComponent" )
-    if ( components ~= nil ) then
-        for key,comp_id in pairs(components) do 
-            local var_name = ComponentGetValue2( comp_id, "name" )
-            if(var_name == variable_name) then
+    local components = EntityGetComponent(entity_id, "VariableStorageComponent")
+    if (components ~= nil) then
+        for key, comp_id in pairs(components) do
+            local var_name = ComponentGetValue2(comp_id, "name")
+            if (var_name == variable_name) then
                 value = ComponentGetValue2(comp_id, variable_type)
             end
         end
