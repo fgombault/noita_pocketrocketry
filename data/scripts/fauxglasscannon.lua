@@ -25,6 +25,8 @@ function shot(entity_id)
 	elseif (modify_lifetime_values_too < 0) then
 		lifetimemodifier = 1 / explosionmodifier
 	end
+	-- experimental crazyness
+	lifetimemodifier = lifetimemodifier ^ 2
 	-- TODO: this has to be configurable?
 	speedmodifier = lifetimemodifier
 
@@ -38,7 +40,7 @@ function shot(entity_id)
 			ComponentSetValue2(projectile, "damage", damage)
 
 			local lifetime = ComponentGetValue2(projectile, "lifetime")
-			if (lifetime ~= -1) then
+			if (lifetime ~= -1 and lifetime > 2) then
 				lifetime = math.floor(lifetime * lifetimemodifier)
 				-- pseudo wisps, is it a bad idea?
 				if (lifetime <= -2 and lifetime >= -5) then lifetime = 2000 end
