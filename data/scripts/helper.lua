@@ -54,12 +54,12 @@ function getPlayerEntity()
 end
 
 function getCurrentlyEquippedWandKaboom()
-	local signature = getInternalVariableValue(getPlayerEntity(), "held_wand_hash", "value_int")
-  local seed = tonumber(StatsGetValue("world_seed"))
-	SetRandomSeed(signature, seed)
-	local explosionmodifier = RandomDistributionf(0.3, 3, 1)
-	-- local explosionmodifier = Randomf(0.5, 2)
-	return explosionmodifier
+    local signature = getInternalVariableValue(getPlayerEntity(), "held_wand_hash", "value_int")
+    local seed = tonumber(StatsGetValue("world_seed"))
+    SetRandomSeed(signature, seed)
+    local explosionmodifier = RandomDistributionf(0.3, 3, 1)
+    -- local explosionmodifier = Randomf(0.5, 2)
+    return explosionmodifier
 end
 
 function addNewInternalVariable(entity_id, variable_name, variable_type, initial_value)
@@ -120,24 +120,33 @@ function RenameWand(wand, new_name)
     if item_component == nil or item_component == 0 then return end
     if potion_component ~= nil and potion_component ~= 0 then return end
 
-    local name = ComponentGetValue2(item_component, "item_name") or ""
+    local current_name = ComponentGetValue2(item_component, "item_name") or ""
 
     if (new_name == nil or new_name == "") then return end
-    if string.lower(new_name) == string.lower(name) then return end
+    if string.lower(new_name) == string.lower(current_name) then return end
+    if (current_name == "" or current_name == "wand") then
+        ComponentSetValue2(item_component, "item_name", new_name)
 
-    ComponentSetValue2(item_component, "item_name", new_name)
+        local uses_item_name = ComponentGetValue2(item_component, "always_use_item_name_in_ui")
+        if not uses_item_name then
+            ComponentSetValue2(item_component, "always_use_item_name_in_ui", true)
+        end
 
-    local uses_item_name = ComponentGetValue2(item_component, "always_use_item_name_in_ui")
-    if not uses_item_name then
-        ComponentSetValue2(item_component, "always_use_item_name_in_ui", true)
+        if info_component ~= 0 and info_component ~= nil then
+            ComponentSetValue2(info_component, "name", new_name)
+        end
+        GamePrint("I shall call you: " .. new_name)
     end
-
-    if info_component ~= 0 and info_component ~= nil then
-        ComponentSetValue2(info_component, "name", new_name)
-    end
-		-- print("renamed wand: " .. name)
+    -- print("renamed wand: " .. name)
 end
 
+WandNames = { "test1", "test2", "test3", "test4" }
+dofile("data/scripts/names.lua")
+
 function getNameForKaboom(kaboom)
-  return "" .. kaboom
+    local seed = tonumber(StatsGetValue("world_seed"))
+    SetRandomSeed(seed, kaboom)
+    local wandname = WandNames[Random(1, #WandNames)]
+    local k = math.floor(kaboom * 10) / 10
+    return wandname .. " " .. k
 end

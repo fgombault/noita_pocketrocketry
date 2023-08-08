@@ -3,6 +3,15 @@
 alias tdd := watch
 
 build:
+  echo "WandNames = {" > data/scripts/names.lua
+  cat wand_names/*.txt > names.list
+  sed -ibak -e 's/^/"/' -e 's/$/", /' names.list
+  cat names.list >> data/scripts/names.lua
+  echo "}" >> data/scripts/names.lua
+  rm names.list
+  cat data/scripts/names.lua
+
+release: build
   rm pocketrocketry.zip
   mkdir pocketrocketry
   cp -r *xml *lua mod_id.txt data pocketrocketry/
