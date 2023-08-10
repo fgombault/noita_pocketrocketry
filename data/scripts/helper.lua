@@ -145,7 +145,7 @@ dofile("data/scripts/names.lua")
 
 function mapKaboomToRange(kaboom, rangemax)
     SetRandomSeed(kaboom, 0)
-    return Random(1, #rangemax)
+    return Random(1, rangemax)
 end
 
 function getNameForKaboom(kaboom)
