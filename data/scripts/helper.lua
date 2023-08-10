@@ -143,10 +143,19 @@ end
 WandNames = { "test1", "test2", "test3", "test4" }
 dofile("data/scripts/names.lua")
 
+function mapKaboomToRange(kaboom, rangemax)
+    SetRandomSeed(kaboom, 0)
+    return Random(1, #rangemax)
+end
+
 function getNameForKaboom(kaboom)
-    local seed = tonumber(StatsGetValue("world_seed"))
-    SetRandomSeed(seed, kaboom)
-    local wandname = WandNames[Random(1, #WandNames)]
-    local k = math.floor(kaboom * 10) / 10
-    return wandname .. " " .. k
+    local wandname = WandNames[mapKaboomToRange(kaboom, #WandNames)]
+    -- local rounded_k = math.floor(kaboom * 10) / 10
+    local hint = ""
+    if (kaboom > 1.2) then hint = "!" end
+    if (kaboom > 2) then hint = "!!" end
+    if (kaboom < 0.8) then hint = "." end
+    if (kaboom < 0.5) then hint = ".." end
+
+    return wandname .. hint
 end
