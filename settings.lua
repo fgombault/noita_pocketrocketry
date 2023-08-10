@@ -1,0 +1,108 @@
+dofile("data/scripts/lib/mod_settings.lua")
+
+function mod_setting_bool_custom(mod_id, gui, in_main_menu, im_id, setting)
+	local value = ModSettingGetNextValue(mod_setting_get_id(mod_id, setting))
+	local text = setting.ui_name .. " - " .. GameTextGet(value and "$option_on" or "$option_off")
+
+	if GuiButton(gui, im_id, mod_setting_group_x_offset, 0, text) then
+		ModSettingSetNextValue(mod_setting_get_id(mod_id, setting), not value, false)
+	end
+
+	mod_setting_tooltip(mod_id, gui, in_main_menu, setting)
+end
+
+function mod_setting_change_callback(mod_id, gui, in_main_menu, setting, old_value, new_value)
+	print(tostring(new_value))
+end
+
+function reset_all_data()
+end
+
+function unlock_all_data()
+end
+
+local mod_id = "pocketrocketry" -- This should match the name of your mod's folder.
+mod_settings_version = 1        -- This is a magic global that can be used to migrate settings to new mod versions. call mod_settings_get_version() before mod_settings_update() to get the old value.
+mod_settings =
+{
+	-- {
+	-- 	id = "_",
+	-- 	ui_name = "(Confused or want more info? Check out the mod's wiki page at noita.wiki.gg/Mods!)",
+	-- 	not_setting = true,
+	-- },
+	-- {
+	-- 	id = "pacifist",
+	-- 	ui_name = "Pacifist chest replacement",
+	-- 	ui_description = "Should the pacifist chest always be replaced with a Mini Treasure Chest?",
+	-- 	value_default = "yes",
+	-- 	values = { { "yes", "Yes" }, { "no", "No" } },
+	-- 	scope = MOD_SETTING_SCOPE_RUNTIME,
+	-- 	change_fn = mod_setting_change_callback, -- Called when the user interact with the settings widget.
+	-- },
+	{
+		id = "kaboomDistribution",
+		ui_name = "How wildy wands get modified",
+		ui_description = "Normal for serious runs, madhouse if you don't care for your safety",
+		value_default = "normal",
+		values = { { "normal", "Normal" }, { "madhouse", "Madhouse" } },
+		scope = MOD_SETTING_SCOPE_RUNTIME,
+		change_fn = mod_setting_change_callback, -- Called when the user interact with the settings widget.
+	},
+	{
+		id = "kaboomScale",
+		ui_name = "Modification scale",
+		ui_description = "Maximum multiplier of explosion radius",
+		value_default = 3,
+		value_min = 0,
+		value_max = 10,
+		value_display_multiplier = 1,
+		value_display_formatting = " $0.0",
+		scope = MOD_SETTING_SCOPE_NEW_GAME,
+	},
+	{
+		id = "modificationType",
+		ui_name = "Wand modification type",
+		ui_description = "Choose which attributes get modified",
+		value_default = "full",
+		values = { { "explosion only", "Explosion radius only" },
+			{ "full",           "Explosion radius, damage and speed" },
+			{ "none",           "None" } },
+		scope = MOD_SETTING_SCOPE_NEW_GAME,
+		change_fn = mod_setting_change_callback, -- Called when the user interact with the settings widget.
+	},
+	{
+		id = "wandNames",
+		ui_name = "Wand names",
+		ui_description = "Rename wands after you shoot them once",
+		value_default = "funny",
+		values = { { "funny", "Funny" }, { "don't rename", "Don't rename" } },
+		scope = MOD_SETTING_SCOPE_NEW_GAME,
+		change_fn = mod_setting_change_callback, -- Called when the user interact with the settings widget.
+	},
+}
+
+-- This function is called to ensure the correct setting values are visible to the game via ModSettingGet(). your mod's settings don't work if you don't have a function like this defined in settings.lua.
+-- This function is called:
+--		- when entering the mod settings menu (init_scope will be MOD_SETTINGS_SCOPE_ONLY_SET_DEFAULT)
+-- 		- before mod initialization when starting a new game (init_scope will be MOD_SETTING_SCOPE_NEW_GAME)
+--		- when entering the game after a restart (init_scope will be MOD_SETTING_SCOPE_RESTART)
+--		- at the end of an update when mod settings have been changed via ModSettingsSetNextValue() and the game is unpaused (init_scope will be MOD_SETTINGS_SCOPE_RUNTIME)
+function ModSettingsUpdate(init_scope)
+	local old_version = mod_settings_get_version(mod_id) -- This can be used to migrate some settings between mod versions.
+	mod_settings_update(mod_id, mod_settings, init_scope)
+end
+
+-- This function should return the number of visible setting UI elements.
+-- Your mod's settings wont be visible in the mod settings menu if this function isn't defined correctly.
+-- If your mod changes the displayed settings dynamically, you might need to implement custom logic.
+-- The value will be used to determine whether or not to display various UI elements that link to mod settings.
+-- At the moment it is fine to simply return 0 or 1 in a custom implementation, but we don't guarantee that will be the case in the future.
+-- This function is called every frame when in the settings menu.
+function ModSettingsGuiCount()
+	return mod_settings_gui_count(mod_id, mod_settings)
+end
+
+-- This function is called to display the settings UI for this mod. Your mod's settings wont be visible in the mod settings menu if this function isn't defined correctly.
+function ModSettingsGui(gui, in_main_menu)
+	mod_settings_gui(mod_id, mod_settings, gui, in_main_menu)
+end

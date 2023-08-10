@@ -14,3 +14,13 @@ modify_lifetime_values_too = -1
 -- example: only modifies radius and damage, leave lifetime out of it
 -- modify_damage_values_too = 1
 -- modify_lifetime_values_too = 0
+
+-- FIXME: implement type "none"
+if ModSettingGet("modificationType") == "explosion only" then
+	modify_damage_values_too = 0
+	modify_lifetime_values_too = 0
+end
+if ModSettingGet("modificationType") == "full" then
+	modify_damage_values_too = 1
+	modify_lifetime_values_too = -1
+end
