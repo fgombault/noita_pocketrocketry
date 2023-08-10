@@ -113,6 +113,8 @@ function setInternalVariableValue(entity_id, variable_name, variable_type, new_v
 end
 
 function RenameWand(wand, new_name)
+    if ModSettingGet("wandNames") == "don't rename" then return end
+
     local item_component = EntityGetFirstComponentIncludingDisabled(wand, "ItemComponent")
     local info_component = EntityGetFirstComponentIncludingDisabled(wand, "UIInfoComponent")
     local potion_component = EntityGetFirstComponentIncludingDisabled(wand, "PotionComponent")
