@@ -1,26 +1,23 @@
 dofile_once("data/scripts/lib/utilities.lua")
 dofile_once("mods/pocketrocketry/data/scripts/helper.lua")
-dofile_once("mods/pocketrocketry/config.lua")
 
 
 function shot(iEntityID)
 	local fExplosionModifier = getCurrentlyEquippedWandKaboom()
-
-	local fDamageModifier = 1
-	if (modify_damage_values_too > 0) then
-		-- INFO: less variation in damage, for balance reasons
-		fDamageModifier = fExplosionModifier ^ 0.7
-	elseif (modify_damage_values_too < 0) then
-		fDamageModifier = 1 / fExplosionModifier
-	end
-	local fSpeedModifier = 1
-	if (modify_speed_values_too > 0) then
-		fSpeedModifier = fExplosionModifier
-	elseif (modify_speed_values_too < 0) then
-		fSpeedModifier = 1 / fExplosionModifier
-	end
+	-- INFO: less damage variation for balance
+	local fDamageModifier = fExplosionModifier ^ 0.7
 	-- INFO: more variation in speed values, as per play testing
-	fSpeedModifier = fSpeedModifier ^ 2
+	local fSpeedModifier = (1 / fExplosionModifier)
+
+	if ModSettingGet("modificationType") == "explosion only" then
+		fSpeedModifier = 1
+		fDamageModifier = 1
+	end
+	if ModSettingGet("modificationType") == "none" then
+		fSpeedModifier = 1
+		fDamageModifier = 1
+		fExplosionModifier = 1
+	end
 
 	local iWandID = getCurrentlyEquippedWandId()
 	if (iWandID ~= nil and iWandID > 0) then
@@ -28,8 +25,7 @@ function shot(iEntityID)
 			local sName = getNameForKaboom(fExplosionModifier)
 			RenameWand(iWandID, sName)
 		end
-		-- TODO: toggle with settings
-		-- FIXME: this doesn't affect the first shot, but it should
+		-- This doesn't affect the first shot, surprise for the player?
 		SetWandSpeedMult(iWandID, fSpeedModifier)
 	end
 
