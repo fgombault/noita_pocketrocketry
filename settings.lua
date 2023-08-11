@@ -1,25 +1,5 @@
 dofile("data/scripts/lib/mod_settings.lua")
 
-function mod_setting_bool_custom(mod_id, gui, in_main_menu, im_id, setting)
-	local value = ModSettingGetNextValue(mod_setting_get_id(mod_id, setting))
-	local text = setting.ui_name .. " - " .. GameTextGet(value and "$option_on" or "$option_off")
-
-	if GuiButton(gui, im_id, mod_setting_group_x_offset, 0, text) then
-		ModSettingSetNextValue(mod_setting_get_id(mod_id, setting), not value, false)
-	end
-
-	mod_setting_tooltip(mod_id, gui, in_main_menu, setting)
-end
-
-function mod_setting_change_callback(mod_id, gui, in_main_menu, setting, old_value, new_value)
-	print(tostring(new_value))
-end
-
-function reset_all_data()
-end
-
-function unlock_all_data()
-end
 
 local mod_id = "pocketrocketry" -- This should match the name of your mod's folder.
 mod_settings_version = 1        -- This is a magic global that can be used to migrate settings to new mod versions. call mod_settings_get_version() before mod_settings_update() to get the old value.
@@ -46,7 +26,6 @@ mod_settings =
 		value_default = "normal",
 		values = { { "normal", "Normal" }, { "madhouse", "Madhouse" } },
 		scope = MOD_SETTING_SCOPE_RUNTIME,
-		change_fn = mod_setting_change_callback, -- Called when the user interact with the settings widget.
 	},
 	{
 		id = "kaboomScale",
@@ -57,7 +36,7 @@ mod_settings =
 		value_max = 10,
 		value_display_multiplier = 1,
 		value_display_formatting = " $0.0",
-		scope = MOD_SETTING_SCOPE_NEW_GAME,
+		scope = MOD_SETTING_SCOPE_RUNTIME,
 	},
 	{
 		id = "modificationType",
@@ -67,8 +46,7 @@ mod_settings =
 		values = { { "explosion only", "Explosion radius only" },
 			{ "full",           "Explosion radius, damage and speed" },
 			{ "none",           "None" } },
-		scope = MOD_SETTING_SCOPE_NEW_GAME,
-		change_fn = mod_setting_change_callback, -- Called when the user interact with the settings widget.
+		scope = MOD_SETTING_SCOPE_RUNTIME,
 	},
 	{
 		id = "wandNames",
@@ -76,8 +54,7 @@ mod_settings =
 		ui_description = "Rename wands after you shoot them once",
 		value_default = "funny",
 		values = { { "funny", "Funny" }, { "don't rename", "Don't rename" } },
-		scope = MOD_SETTING_SCOPE_NEW_GAME,
-		change_fn = mod_setting_change_callback, -- Called when the user interact with the settings widget.
+		scope = MOD_SETTING_SCOPE_RUNTIME,
 	},
 }
 

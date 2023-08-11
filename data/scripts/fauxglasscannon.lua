@@ -9,11 +9,11 @@ function shot(iEntityID)
 	-- INFO: more variation in speed values, as per play testing
 	local fSpeedModifier = (1 / fExplosionModifier)
 
-	if ModSettingGet("modificationType") == "explosion only" then
+	if ModSettingGet("pocketrocketry.modificationType") == "explosion only" then
 		fSpeedModifier = 1
 		fDamageModifier = 1
 	end
-	if ModSettingGet("modificationType") == "none" then
+	if ModSettingGet("pocketrocketry.modificationType") == "none" then
 		fSpeedModifier = 1
 		fDamageModifier = 1
 		fExplosionModifier = 1
@@ -21,7 +21,7 @@ function shot(iEntityID)
 
 	local iWandID = getCurrentlyEquippedWandId()
 	if (iWandID ~= nil and iWandID > 0) then
-		if (ModSettingGet("wandNames") ~= "don't rename") then
+		if (ModSettingGet("pocketrocketry.wandNames") ~= "don't rename") then
 			local sName = getNameForKaboom(fExplosionModifier)
 			RenameWand(iWandID, sName)
 		end
