@@ -7,7 +7,8 @@ function shot(iEntityID)
 	local fExplosionModifier = getCurrentlyEquippedWandKaboom()
 
 	local iWandID = getCurrentlyEquippedWandId()
-	if (true and iWandID ~= nil and iWandID > 0) then
+	if (ModSettingGet("wandNames") ~= "don't rename" and
+				iWandID ~= nil and iWandID > 0) then
 		local sName = getNameForKaboom(fExplosionModifier)
 		RenameWand(iWandID, sName)
 	end
