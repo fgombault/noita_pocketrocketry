@@ -3,74 +3,67 @@ dofile_once("mods/pocketrocketry/data/scripts/helper.lua")
 dofile_once("mods/pocketrocketry/config.lua")
 
 
-function shot(entity_id)
-	local explosionmodifier = getCurrentlyEquippedWandKaboom()
+function shot(iEntityID)
+	local fExplosionModifier = getCurrentlyEquippedWandKaboom()
 
-	local wand_id = getCurrentlyEquippedWandId()
-	if (true and wand_id ~= nil and wand_id > 0) then
-		local name = getNameForKaboom(explosionmodifier)
-		RenameWand(wand_id, name)
+	local iWandID = getCurrentlyEquippedWandId()
+	if (true and iWandID ~= nil and iWandID > 0) then
+		local sName = getNameForKaboom(fExplosionModifier)
+		RenameWand(iWandID, sName)
 	end
 
-	local damagemodifier = 1
+	local fDamageModifier = 1
 	if (modify_damage_values_too > 0) then
-		damagemodifier = explosionmodifier
+		-- INFO: less variation in damage, for balance reasons
+		fDamageModifier = fExplosionModifier ^ 0.7
 	elseif (modify_damage_values_too < 0) then
-		damagemodifier = 1 / explosionmodifier
+		fDamageModifier = 1 / fExplosionModifier
 	end
-	local lifetimemodifier = 1
-	local speedmodifier = 1
-	if (modify_lifetime_values_too > 0) then
-		lifetimemodifier = explosionmodifier
-	elseif (modify_lifetime_values_too < 0) then
-		lifetimemodifier = 1 / explosionmodifier
+	local fSpeedModifier = 1
+	if (modify_speed_values_too > 0) then
+		fSpeedModifier = fExplosionModifier
+	elseif (modify_speed_values_too < 0) then
+		fSpeedModifier = 1 / fExplosionModifier
 	end
-	-- experimental crazyness
-	lifetimemodifier = lifetimemodifier ^ 2
-	-- TODO: this has to be configurable?
-	speedmodifier = lifetimemodifier
+	-- INFO: more variation in speed values, as per play testing
+	fSpeedModifier = fSpeedModifier ^ 2
 
 	-- print("shot explosion modifier:" .. explosionmodifier)
 
-	local comps = EntityGetComponent(entity_id, "ProjectileComponent")
-	if (comps ~= nil) then
-		for _, projectile in ipairs(comps) do
-			local damage = ComponentGetValue2(projectile, "damage")
-			damage = damage * damagemodifier
-			ComponentSetValue2(projectile, "damage", damage)
+	local aProjComps = EntityGetComponent(iEntityID, "ProjectileComponent")
+	if (aProjComps ~= nil) then
+		for _, iProjectile in ipairs(aProjComps) do
+			local iDamage = ComponentGetValue2(iProjectile, "damage")
+			iDamage = iDamage * fDamageModifier
+			ComponentSetValue2(iProjectile, "damage", iDamage)
 
-			local lifetime = ComponentGetValue2(projectile, "lifetime")
-			if (lifetime ~= -1 and lifetime > 2) then
-				lifetime = math.floor(lifetime * lifetimemodifier)
-				-- pseudo wisps, is it a bad idea?
-				if (lifetime <= -2 and lifetime >= -5) then lifetime = 2000 end
-				ComponentSetValue2(projectile, "lifetime", lifetime)
-			end
-			local speed_min = ComponentGetValue2(projectile, "speed_min")
-			speed_min = speed_min * speedmodifier
-			ComponentSetValue2(projectile, "speed_min", speed_min)
-			local speed_max = ComponentGetValue2(projectile, "speed_max")
-			speed_max = speed_max * speedmodifier
-			ComponentSetValue2(projectile, "speed_max", speed_max)
+			local iSpeedMin = ComponentGetValue2(iProjectile, "speed_min")
+			iSpeedMin = iSpeedMin * fSpeedModifier
+			ComponentSetValue2(iProjectile, "speed_min", iSpeedMin)
+			local iSpeedMax = ComponentGetValue2(iProjectile, "speed_max")
+			iSpeedMax = iSpeedMax * fSpeedModifier
+			ComponentSetValue2(iProjectile, "speed_max", iSpeedMax)
 
-			local dtypes = { "projectile", "explosion", "melee", "ice", "slice", "electricity", "radioactive", "drill", "fire" }
-			local damage_by_types = ComponentObjectGetMembers(projectile, "damage_by_type") or {}
-			for i, damageByTypeComp in ipairs(damage_by_types) do
-				for a, b in ipairs(dtypes) do
-					local v = ComponentGetValue2(damageByTypeComp, b)
-					v = v * damagemodifier
-					ComponentSetValue2(damageByTypeComp, b, v)
+			local aDamTypes = { "projectile", "explosion", "melee", "ice", "slice",
+				"electricity", "radioactive", "drill", "fire" }
+			local aDamageByTypesComps = ComponentObjectGetMembers(iProjectile, "damage_by_type") or {}
+			for _, iDamageByTypeComp in ipairs(aDamageByTypesComps) do
+				for _, iDamType in ipairs(aDamTypes) do
+					local fDamValue = ComponentGetValue2(iDamageByTypeComp, iDamType)
+					fDamValue = fDamValue * fDamageModifier
+					ComponentSetValue2(iDamageByTypeComp, iDamType, fDamValue)
 				end
 			end
 
-			local etypes = { "explosion_radius", "ray_energy", "sparks_count_min", "sparks_count_max", "camera_shake",
-				"damage", "material_sparks_count_min", "material_sparks_count_max", "stains_radius" }
-			local explosionConfigs = ComponentObjectGetMembers(projectile, "config_explosion") or {}
-			for i, explosionConfigComp in ipairs(explosionConfigs) do
-				for a, b in ipairs(etypes) do
-					local v = ComponentGetValue2(explosionConfigComp, b)
-					v = v * damagemodifier
-					ComponentSetValue2(explosionConfigComp, b, v)
+			local aExplTypes = { "explosion_radius", "ray_energy", "sparks_count_min",
+				"sparks_count_max", "camera_shake", "damage",
+				"material_sparks_count_min", "material_sparks_count_max", "stains_radius" }
+			local explosionConfigs = ComponentObjectGetMembers(iProjectile, "config_explosion") or {}
+			for _, explosionConfigComp in ipairs(explosionConfigs) do
+				for _, iExplType in ipairs(aExplTypes) do
+					local fExplValue = ComponentGetValue2(explosionConfigComp, iExplType)
+					fExplValue = fExplValue * fDamageModifier
+					ComponentSetValue2(explosionConfigComp, iExplType, fExplValue)
 				end
 			end
 		end
