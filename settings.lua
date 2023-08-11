@@ -56,6 +56,14 @@ mod_settings =
 		values = { { "funny", "Funny" }, { "don't rename", "Don't rename" } },
 		scope = MOD_SETTING_SCOPE_RUNTIME,
 	},
+	{
+		id = "nameHint",
+		ui_name = "Hint text in wand name",
+		ui_description = "How the wand name tells you about explosion factor",
+		value_default = "subtle",
+		values = { { "subtle", "Subtle" }, { "number", "Number" }, { "no", "No" } },
+		scope = MOD_SETTING_SCOPE_RUNTIME,
+	},
 }
 
 -- This function is called to ensure the correct setting values are visible to the game via ModSettingGet(). your mod's settings don't work if you don't have a function like this defined in settings.lua.

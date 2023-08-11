@@ -165,12 +165,23 @@ end
 
 function getNameForKaboom(fKaboom)
     local sWandName = WandNames[mapKaboomToRange(fKaboom, #WandNames)]
-    -- local rounded_k = math.floor(kaboom * 10) / 10
     local sHint = ""
-    if (fKaboom > 1.2) then sHint = "!" end
-    if (fKaboom > 2) then sHint = "!!" end
-    if (fKaboom < 0.8) then sHint = "." end
-    if (fKaboom < 0.5) then sHint = ".." end
+
+    if (ModSettingGet("pocketrocketry.nameHint") == "subtle") then
+        local fScale = ModSettingGet("pocketrocketry.kaboomScale") or 3
+        local fThresh1 = fScale / 8
+        local fThresh2 = fScale / 2
+        if (fKaboom > (1 + fThresh1)) then sHint = "!" end
+        if (fKaboom > (1 + fThresh2)) then sHint = "!!" end
+        if (fKaboom < (1 - fThresh1)) then sHint = "." end
+        if (fKaboom < (1 - fThresh2)) then sHint = ".." end
+    end
+    if (ModSettingGet("pocketrocketry.nameHint") == "number") then
+        local iPrecision = 1000
+        local iRoundedK = math.floor(fKaboom * iPrecision) / iPrecision
+        sHint = " " .. iRoundedK
+    end
 
     return sWandName .. sHint
+    -- return sWandName .. sHint
 end
