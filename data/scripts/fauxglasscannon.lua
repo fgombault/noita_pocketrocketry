@@ -6,8 +6,7 @@ function shot(iEntityID)
 	local fExplosionModifier = getCurrentlyEquippedWandKaboom()
 	-- INFO: less damage variation for balance
 	local fDamageModifier = fExplosionModifier ^ 0.7
-	-- INFO: more variation in speed values, as per play testing
-	local fSpeedModifier = (1 / fExplosionModifier)
+	local fSpeedModifier = (1 / fExplosionModifier) ^ 0.7
 
 	if ModSettingGet("pocketrocketry.modificationType") == "explosion only" then
 		fSpeedModifier = 1
