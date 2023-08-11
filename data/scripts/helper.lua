@@ -112,6 +112,12 @@ function setInternalVariableValue(entity_id, variable_name, variable_type, new_v
     end
 end
 
+function SetWandSpeedMult(iWandID, fSpeedMult)
+    local iAbilityComp = EntityGetFirstComponentIncludingDisabled(iWandID, "AbilityComponent")
+    if (ComponentGetValue2(iAbilityComp, "use_gun_script") ~= true) then return end
+    ComponentObjectSetValue2(iAbilityComp, "gunaction_config", "speed_multiplier", fSpeedMult)
+end
+
 function RenameWand(wand, new_name)
     local item_component = EntityGetFirstComponentIncludingDisabled(wand, "ItemComponent")
     local info_component = EntityGetFirstComponentIncludingDisabled(wand, "UIInfoComponent")

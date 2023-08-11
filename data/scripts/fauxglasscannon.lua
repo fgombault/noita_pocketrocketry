@@ -6,13 +6,6 @@ dofile_once("mods/pocketrocketry/config.lua")
 function shot(iEntityID)
 	local fExplosionModifier = getCurrentlyEquippedWandKaboom()
 
-	local iWandID = getCurrentlyEquippedWandId()
-	if (ModSettingGet("wandNames") ~= "don't rename" and
-				iWandID ~= nil and iWandID > 0) then
-		local sName = getNameForKaboom(fExplosionModifier)
-		RenameWand(iWandID, sName)
-	end
-
 	local fDamageModifier = 1
 	if (modify_damage_values_too > 0) then
 		-- INFO: less variation in damage, for balance reasons
@@ -29,6 +22,17 @@ function shot(iEntityID)
 	-- INFO: more variation in speed values, as per play testing
 	fSpeedModifier = fSpeedModifier ^ 2
 
+	local iWandID = getCurrentlyEquippedWandId()
+	if (iWandID ~= nil and iWandID > 0) then
+		if (ModSettingGet("wandNames") ~= "don't rename") then
+			local sName = getNameForKaboom(fExplosionModifier)
+			RenameWand(iWandID, sName)
+		end
+		-- TODO: toggle with settings
+		-- FIXME: this doesn't affect the first shot, but it should
+		SetWandSpeedMult(iWandID, fSpeedModifier)
+	end
+
 	-- print("shot explosion modifier:" .. explosionmodifier)
 
 	local aProjComps = EntityGetComponent(iEntityID, "ProjectileComponent")
@@ -37,13 +41,6 @@ function shot(iEntityID)
 			local iDamage = ComponentGetValue2(iProjectile, "damage")
 			iDamage = iDamage * fDamageModifier
 			ComponentSetValue2(iProjectile, "damage", iDamage)
-
-			local iSpeedMin = ComponentGetValue2(iProjectile, "speed_min")
-			iSpeedMin = iSpeedMin * fSpeedModifier
-			ComponentSetValue2(iProjectile, "speed_min", iSpeedMin)
-			local iSpeedMax = ComponentGetValue2(iProjectile, "speed_max")
-			iSpeedMax = iSpeedMax * fSpeedModifier
-			ComponentSetValue2(iProjectile, "speed_max", iSpeedMax)
 
 			local aDamTypes = { "projectile", "explosion", "melee", "ice", "slice",
 				"electricity", "radioactive", "drill", "fire" }
