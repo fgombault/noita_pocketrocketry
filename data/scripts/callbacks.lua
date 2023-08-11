@@ -1,41 +1,41 @@
-function addNewLuaCallback(entity_id, callback_type, script_path, frames_between_runs, remove_after_executed, tag)
-    local lc_id = nil
-    if(callback_type == "overtime") then
-        lc_id = EntityAddComponent2(entity_id, "LuaComponent", {
-            script_source_file=script_path,
-            execute_every_n_frame=frames_between_runs,
-            remove_after_executed=remove_after_executed
+function AddNewLuaCallback(iEntityID, sCallbackType, sScriptPath, iFramesBetweenRuns, bRemoveAfterExecuted, sTag)
+    local iLCID = nil
+    if (sCallbackType == "overtime") then
+        iLCID = EntityAddComponent2(iEntityID, "LuaComponent", {
+            script_source_file = sScriptPath,
+            execute_every_n_frame = iFramesBetweenRuns,
+            remove_after_executed = bRemoveAfterExecuted
         })
-    elseif(callback_type == "on_collision") then
-        lc_id = EntityAddComponent2(entity_id, "LuaComponent", {
-            script_collision_trigger_hit=script_path,
-            execute_every_n_frame=frames_between_runs,
-            remove_after_executed=remove_after_executed
+    elseif (sCallbackType == "on_collision") then
+        iLCID = EntityAddComponent2(iEntityID, "LuaComponent", {
+            script_collision_trigger_hit = sScriptPath,
+            execute_every_n_frame = iFramesBetweenRuns,
+            remove_after_executed = bRemoveAfterExecuted
         })
-    elseif(callback_type == "on_damaged") then
-        lc_id = EntityAddComponent2(entity_id, "LuaComponent", {
-            script_damage_received=script_path,
-            execute_every_n_frame=frames_between_runs,
-            remove_after_executed=remove_after_executed
+    elseif (sCallbackType == "on_damaged") then
+        iLCID = EntityAddComponent2(iEntityID, "LuaComponent", {
+            script_damage_received = sScriptPath,
+            execute_every_n_frame = iFramesBetweenRuns,
+            remove_after_executed = bRemoveAfterExecuted
         })
-    elseif(callback_type == "on_death") then
-        lc_id = EntityAddComponent2(entity_id, "LuaComponent", {
-            script_death=script_path,
-            execute_every_n_frame=frames_between_runs,
-            remove_after_executed=remove_after_executed
+    elseif (sCallbackType == "on_death") then
+        iLCID = EntityAddComponent2(iEntityID, "LuaComponent", {
+            script_death = sScriptPath,
+            execute_every_n_frame = iFramesBetweenRuns,
+            remove_after_executed = bRemoveAfterExecuted
         })
-    elseif(callback_type == "on_projectile_shot") then
-        lc_id = EntityAddComponent2(entity_id, "LuaComponent", {
-            script_shot=script_path,
-            execute_every_n_frame=frames_between_runs,
-            remove_after_executed=remove_after_executed
+    elseif (sCallbackType == "on_projectile_shot") then
+        iLCID = EntityAddComponent2(iEntityID, "LuaComponent", {
+            script_shot = sScriptPath,
+            execute_every_n_frame = iFramesBetweenRuns,
+            remove_after_executed = bRemoveAfterExecuted
         })
-    elseif(callback_type == "on_kick") then
-        lc_id = EntityAddComponent2(entity_id, "LuaComponent", {
-            script_kick=script_path,
-            execute_every_n_frame=frames_between_runs,
-            remove_after_executed=remove_after_executed
+    elseif (sCallbackType == "on_kick") then
+        iLCID = EntityAddComponent2(iEntityID, "LuaComponent", {
+            script_kick = sScriptPath,
+            execute_every_n_frame = iFramesBetweenRuns,
+            remove_after_executed = bRemoveAfterExecuted
         })
     end
-    ComponentAddTag(lc_id, tag)
+    ComponentAddTag(iLCID, sTag)
 end

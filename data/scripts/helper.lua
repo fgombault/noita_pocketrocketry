@@ -1,64 +1,64 @@
-function getWandInfo(entity)
-    local ability_comp = EntityGetFirstComponentIncludingDisabled(entity, "AbilityComponent")
-    local wand_info = {}
-    if ability_comp then
+function GetWandInfo(iEntityID)
+    local iAbilityComp = EntityGetFirstComponentIncludingDisabled(iEntityID, "AbilityComponent")
+    local aWandInfo = {}
+    if iAbilityComp then
         -- print("yep, seems like a wand")
-        local shuffle = ComponentObjectGetValue2(ability_comp, "gun_config", "shuffle_deck_when_empty")
-        wand_info[0] = 0
-        if shuffle then wand_info[0] = 1 end
-        wand_info[1] = ComponentObjectGetValue2(ability_comp, "gun_config", "actions_per_round")
-        wand_info[2] = ComponentObjectGetValue2(ability_comp, "gunaction_config", "fire_rate_wait")
-        wand_info[3] = ComponentObjectGetValue2(ability_comp, "gun_config", "reload_time")
-        wand_info[4] = ComponentGetValue2(ability_comp, "mana_max")
-        wand_info[5] = ComponentGetValue2(ability_comp, "mana_charge_speed")
-        wand_info[6] = ComponentObjectGetValue2(ability_comp, "gun_config", "deck_capacity")
-        wand_info[7] = ComponentObjectGetValue2(ability_comp, "gunaction_config", "spread_degrees")
+        local shuffle = ComponentObjectGetValue2(iAbilityComp, "gun_config", "shuffle_deck_when_empty")
+        aWandInfo[0] = 0
+        if shuffle then aWandInfo[0] = 1 end
+        aWandInfo[1] = ComponentObjectGetValue2(iAbilityComp, "gun_config", "actions_per_round")
+        aWandInfo[2] = ComponentObjectGetValue2(iAbilityComp, "gunaction_config", "fire_rate_wait")
+        aWandInfo[3] = ComponentObjectGetValue2(iAbilityComp, "gun_config", "reload_time")
+        aWandInfo[4] = ComponentGetValue2(iAbilityComp, "mana_max")
+        aWandInfo[5] = ComponentGetValue2(iAbilityComp, "mana_charge_speed")
+        aWandInfo[6] = ComponentObjectGetValue2(iAbilityComp, "gun_config", "deck_capacity")
+        aWandInfo[7] = ComponentObjectGetValue2(iAbilityComp, "gunaction_config", "spread_degrees")
     end
-    return wand_info
+    return aWandInfo
 end
 
-function fnv1a_hash(table)
-    local hash = 2166136261
-    for i = 1, #table do
-        hash = bit.bxor(hash, table[i])
-        hash = bit.band(hash * 16777619, 0xffffffff)
+function Fnv1a_hash(aTable)
+    local iHash = 2166136261
+    for i = 1, #aTable do
+        iHash = bit.bxor(iHash, aTable[i])
+        iHash = bit.band(iHash * 16777619, 0xffffffff)
     end
-    return hash
+    return iHash
 end
 
-function getCurrentlyEquippedWandId()
-    local i2c_id = EntityGetFirstComponentIncludingDisabled(getPlayerEntity(), "Inventory2Component")
-    local wand_id = ComponentGetValue2(i2c_id, "mActualActiveItem")
+function GetCurrentlyEquippedWandId()
+    local iInventory2Comp = EntityGetFirstComponentIncludingDisabled(GetPlayerEntity(), "Inventory2Component")
+    local iWandID = ComponentGetValue2(iInventory2Comp, "mActualActiveItem")
 
-    if (EntityHasTag(wand_id, "wand")) then
-        return wand_id
+    if (EntityHasTag(iWandID, "wand")) then
+        return iWandID
     end
     return nil
 end
 
-function getCurrentlyEquippedWandHash()
-    local wand_id = getCurrentlyEquippedWandId()
-    if (wand_id ~= nil and wand_id > 0) then
-        local tab = getWandInfo(wand_id)
-        if (tab) then
-            return fnv1a_hash(tab)
+function GetCurrentlyEquippedWandSignature()
+    local iWandID = GetCurrentlyEquippedWandId()
+    if (iWandID ~= nil and iWandID > 0) then
+        local aTable = GetWandInfo(iWandID)
+        if (aTable) then
+            return Fnv1a_hash(aTable)
         end
     end
     return -1
 end
 
-function getPlayerEntity()
-    local players = EntityGetWithTag("player_unit")
-    if #players == 0 then return end
-    return players[1]
+function GetPlayerEntity()
+    local aPlayers = EntityGetWithTag("player_unit")
+    if #aPlayers == 0 then return end
+    return aPlayers[1]
 end
 
-function getCurrentlyEquippedWandKaboom()
-    local signature = getInternalVariableValue(getPlayerEntity(), "held_wand_hash", "value_int")
-    local seed = tonumber(StatsGetValue("world_seed"))
+function GetCurrentlyEquippedWandKaboom()
+    local iSignature = GetInternalVariableValue(GetPlayerEntity(), "held_wand_hash", "value_int")
+    local iSeed = tonumber(StatsGetValue("world_seed"))
     local iScale = ModSettingGet("pocketrocketry.kaboomScale") or 3
     local fSharpness = 2
-    SetRandomSeed(signature, seed)
+    SetRandomSeed(iSignature, iSeed)
     if ModSettingGet("pocketrocketry.kaboomDistribution") == "madhouse" then
         local f = Randomf(1, iScale)
         if (Random(1, 2) == 1) then
@@ -71,51 +71,51 @@ function getCurrentlyEquippedWandKaboom()
     return RandomDistributionf(1 / iScale, iScale, 1, fSharpness)
 end
 
-function addNewInternalVariable(entity_id, variable_name, variable_type, initial_value)
-    if (variable_type == "value_int") then
-        EntityAddComponent2(entity_id, "VariableStorageComponent", {
-            name = variable_name,
-            value_int = initial_value
+function AddNewInternalVariable(iEntityID, sVariableName, sVariableType, sInitialValue)
+    if (sVariableType == "value_int") then
+        EntityAddComponent2(iEntityID, "VariableStorageComponent", {
+            name = sVariableName,
+            value_int = sInitialValue
         })
-    elseif (variable_type == "value_string") then
-        EntityAddComponent2(entity_id, "VariableStorageComponent", {
-            name = variable_name,
-            value_string = initial_value
+    elseif (sVariableType == "value_string") then
+        EntityAddComponent2(iEntityID, "VariableStorageComponent", {
+            name = sVariableName,
+            value_string = sInitialValue
         })
-    elseif (variable_type == "value_float") then
-        EntityAddComponent2(entity_id, "VariableStorageComponent", {
-            name = variable_name,
-            value_float = initial_value
+    elseif (sVariableType == "value_float") then
+        EntityAddComponent2(iEntityID, "VariableStorageComponent", {
+            name = sVariableName,
+            value_float = sInitialValue
         })
-    elseif (variable_type == "value_bool") then
-        EntityAddComponent2(entity_id, "VariableStorageComponent", {
-            name = variable_name,
-            value_bool = initial_value
+    elseif (sVariableType == "value_bool") then
+        EntityAddComponent2(iEntityID, "VariableStorageComponent", {
+            name = sVariableName,
+            value_bool = sInitialValue
         })
     end
 end
 
-function getInternalVariableValue(entity_id, variable_name, variable_type)
-    local value = nil
-    local components = EntityGetComponent(entity_id, "VariableStorageComponent")
-    if (components ~= nil) then
-        for key, comp_id in pairs(components) do
-            local var_name = ComponentGetValue2(comp_id, "name")
-            if (var_name == variable_name) then
-                value = ComponentGetValue2(comp_id, variable_type)
+function GetInternalVariableValue(iEntityID, sVariableName, sVariableType)
+    local sValue = nil
+    local aComponents = EntityGetComponent(iEntityID, "VariableStorageComponent")
+    if (aComponents ~= nil) then
+        for _, iCompID in pairs(aComponents) do
+            local sVarName = ComponentGetValue2(iCompID, "name")
+            if (sVarName == sVariableName) then
+                sValue = ComponentGetValue2(iCompID, sVariableType)
             end
         end
     end
-    return value
+    return sValue
 end
 
-function setInternalVariableValue(entity_id, variable_name, variable_type, new_value)
-    local components = EntityGetComponent(entity_id, "VariableStorageComponent")
-    if (components ~= nil) then
-        for key, comp_id in pairs(components) do
-            local var_name = ComponentGetValue2(comp_id, "name")
-            if (var_name == variable_name) then
-                ComponentSetValue2(comp_id, variable_type, new_value)
+function SetInternalVariableValue(iEntityID, sVariableName, sVariableType, sNewValue)
+    local aComponents = EntityGetComponent(iEntityID, "VariableStorageComponent")
+    if (aComponents ~= nil) then
+        for _, iCompID in pairs(aComponents) do
+            local sVarName = ComponentGetValue2(iCompID, "name")
+            if (sVarName == sVariableName) then
+                ComponentSetValue2(iCompID, sVariableType, sNewValue)
             end
         end
     end
@@ -158,13 +158,13 @@ end
 WandNames = { "test1", "test2", "test3", "test4" }
 dofile("data/scripts/names.lua")
 
-function mapKaboomToRange(fKaboom, iRangeMax)
+function MapKaboomToRange(fKaboom, iRangeMax)
     SetRandomSeed(fKaboom, 0)
     return Random(1, iRangeMax)
 end
 
-function getNameForKaboom(fKaboom)
-    local sWandName = WandNames[mapKaboomToRange(fKaboom, #WandNames)]
+function GetNameForKaboom(fKaboom)
+    local sWandName = WandNames[MapKaboomToRange(fKaboom, #WandNames)]
     local sHint = ""
 
     if (ModSettingGet("pocketrocketry.nameHint") == "subtle") then

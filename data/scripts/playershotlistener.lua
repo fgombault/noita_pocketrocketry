@@ -1,9 +1,9 @@
 dofile_once("mods/pocketrocketry/data/scripts/helper.lua");
 
 -- local playerwandhash = getInternalVariableValue(getPlayerEntity(), "held_wand_hash", "value_int")
-local heldwandhash = getCurrentlyEquippedWandHash()
+local iHeldWandSignature = GetCurrentlyEquippedWandSignature()
 
-function shot(projectile_entity_id)
-	heldwandhash = getCurrentlyEquippedWandHash()
-	setInternalVariableValue(getPlayerEntity(), "held_wand_hash", "value_int", heldwandhash)
+function shot(iProjectileEntityID)
+	iHeldWandSignature = GetCurrentlyEquippedWandSignature()
+	SetInternalVariableValue(GetPlayerEntity(), "held_wand_hash", "value_int", iHeldWandSignature)
 end

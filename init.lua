@@ -10,9 +10,9 @@ function OnWorldInitialized()
 end
 
 function OnPlayerSpawned(player)
-	if (getInternalVariableValue(player, "held_wand_hash", "value_int") == nil) then
-		addNewInternalVariable(player, "held_wand_hash", "value_int", 1)
-		addNewLuaCallback(player, "on_projectile_shot", "mods/pocketrocketry/data/scripts/playershotlistener.lua", 10, false,
+	if (GetInternalVariableValue(player, "held_wand_hash", "value_int") == nil) then
+		AddNewInternalVariable(player, "held_wand_hash", "value_int", 1)
+		AddNewLuaCallback(player, "on_projectile_shot", "mods/pocketrocketry/data/scripts/playershotlistener.lua", 10, false,
 			"playershotlistener")
 		EntityAddComponent(player, "LuaComponent",
 			{

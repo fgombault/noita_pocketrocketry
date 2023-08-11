@@ -3,7 +3,7 @@ dofile_once("mods/pocketrocketry/data/scripts/helper.lua")
 
 
 function shot(iEntityID)
-	local fExplosionModifier = getCurrentlyEquippedWandKaboom()
+	local fExplosionModifier = GetCurrentlyEquippedWandKaboom()
 	-- INFO: less damage variation for balance
 	local fDamageModifier = fExplosionModifier ^ 0.7
 	local fSpeedModifier = (1 / fExplosionModifier) ^ 0.7
@@ -18,10 +18,10 @@ function shot(iEntityID)
 		fExplosionModifier = 1
 	end
 
-	local iWandID = getCurrentlyEquippedWandId()
+	local iWandID = GetCurrentlyEquippedWandId()
 	if (iWandID ~= nil and iWandID > 0) then
 		if (ModSettingGet("pocketrocketry.wandNames") ~= "don't rename") then
-			local sName = getNameForKaboom(fExplosionModifier)
+			local sName = GetNameForKaboom(fExplosionModifier)
 			RenameWand(iWandID, sName)
 		end
 		-- This doesn't affect the first shot, surprise for the player?
