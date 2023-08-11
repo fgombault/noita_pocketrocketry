@@ -56,10 +56,19 @@ end
 function getCurrentlyEquippedWandKaboom()
     local signature = getInternalVariableValue(getPlayerEntity(), "held_wand_hash", "value_int")
     local seed = tonumber(StatsGetValue("world_seed"))
+    local iScale = ModSettingGet("kaboomScale") or 3
+    local fSharpness = 2
     SetRandomSeed(signature, seed)
-    local explosionmodifier = RandomDistributionf(0.3, 3, 1)
-    -- local explosionmodifier = Randomf(0.5, 2)
-    return explosionmodifier
+    if ModSettingGet("kaboomDistribution") == "madhouse" then
+        local f = Randomf(1, iScale)
+        if (Random(1, 2) == 1) then
+            return f
+        else
+            return 1 / f
+        end
+    end
+    -- "normal" distribution
+    return RandomDistributionf(1 / iScale, iScale, 1, fSharpness)
 end
 
 function addNewInternalVariable(entity_id, variable_name, variable_type, initial_value)
