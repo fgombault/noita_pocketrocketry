@@ -60,7 +60,7 @@ function shot(iEntityID)
 			for _, explosionConfigComp in ipairs(explosionConfigs) do
 				for _, iExplType in ipairs(aExplTypes) do
 					local fExplValue = ComponentGetValue2(explosionConfigComp, iExplType)
-					fExplValue = fExplValue * fDamageModifier
+					fExplValue = fExplValue * fExplosionModifier
 					ComponentSetValue2(explosionConfigComp, iExplType, fExplValue)
 				end
 			end
