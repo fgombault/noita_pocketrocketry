@@ -32,31 +32,30 @@ function shot(iEntityID)
 
 	local aProjComps = EntityGetComponent(iEntityID, "ProjectileComponent")
 	if (aProjComps ~= nil) then
-		for _, iProjectile in ipairs(aProjComps) do
+		for _, iProjectile in pairs(aProjComps) do
 			local iDamage = ComponentGetValue2(iProjectile, "damage")
 			iDamage = iDamage * fDamageModifier
 			ComponentSetValue2(iProjectile, "damage", iDamage)
 
 			local aDamTypes = { "projectile", "explosion", "melee", "ice", "slice",
 				"electricity", "radioactive", "drill", "fire" }
-			local aDamageByTypesComps = ComponentObjectGetMembers(iProjectile, "damage_by_type") or {}
-			for _, iDamageByTypeComp in ipairs(aDamageByTypesComps) do
-				for _, iDamType in ipairs(aDamTypes) do
-					local fDamValue = ComponentGetValue2(iDamageByTypeComp, iDamType)
+			for _, sDamType in pairs(aDamTypes) do
+				local fDamValue = ComponentObjectGetValue2(iProjectile, "damage_by_type", sDamType)
+				if (fDamValue ~= nil) then
 					fDamValue = fDamValue * fDamageModifier
-					ComponentSetValue2(iDamageByTypeComp, iDamType, fDamValue)
+					ComponentObjectSetValue2(iProjectile, "damage_by_type", sDamType, fDamValue)
 				end
 			end
 
 			local aExplTypes = { "explosion_radius", "ray_energy", "sparks_count_min",
 				"sparks_count_max", "camera_shake", "damage",
 				"material_sparks_count_min", "material_sparks_count_max", "stains_radius" }
-			local explosionConfigs = ComponentObjectGetMembers(iProjectile, "config_explosion") or {}
-			for _, explosionConfigComp in ipairs(explosionConfigs) do
-				for _, iExplType in ipairs(aExplTypes) do
-					local fExplValue = ComponentGetValue2(explosionConfigComp, iExplType)
-					fExplValue = fExplValue * fExplosionModifier
-					ComponentSetValue2(explosionConfigComp, iExplType, fExplValue)
+			for _, sExplType in pairs(aExplTypes) do
+				local fExplValue = ComponentObjectGetValue2(iProjectile, "config_explosion", sExplType)
+				if (fExplValue ~= nil) then
+					-- game may crash if value is not an integer
+					fExplValue = math.floor(fExplValue * fExplosionModifier)
+					ComponentObjectSetValue2(iProjectile, "config_explosion", sExplType, fExplValue)
 				end
 			end
 		end
