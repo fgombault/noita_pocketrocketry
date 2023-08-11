@@ -1,4 +1,4 @@
-- [ ] 🔴config menu
+- [x] 🔴config menu
 - [x] ❓also affect projectile speed
 - [x] 🟡funny wand renaming
 - [x] seed in wand signature
