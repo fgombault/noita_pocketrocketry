@@ -14,21 +14,20 @@ When Essence of Earth started shooting, the game crashed hard.
 ## Correct code
 
 ```
-			local damage_by_types = ComponentObjectGetMembers(projectile, "damage_by_type") or {};
-			for i, damageByTypeComp in ipairs(damage_by_types) do
-				for a, b in ipairs(dtypes) do
-					local v = ComponentGetValue2(damageByTypeComp, b)
-					v = v * damagemodifier
-					ComponentSetValue2(damageByTypeComp, b, v)
+			for _, sExplType in pairs(aExplTypes) do
+				local fExplValue = ComponentObjectGetValue2(iProjectile, "config_explosion", sExplType)
+				if (fExplValue ~= nil) then
+					-- game may crash if value is not an integer
+					fExplValue = math.floor(fExplValue * fExplosionModifier)
+					ComponentObjectSetValue2(iProjectile, "config_explosion", sExplType, fExplValue)
 				end
 			end
-
 ```
 
 ## Analysis, why wrong?
 
 * ComponentObjectGetValue and ComponentObjectSetValue are deprecated
-* the "damage_by_type" subcomponent didn't exist on that particular shot effect
+* One of these fields MUST be an integer, or else, crash happens
 
 ## Action to learn or to foolproof
 
