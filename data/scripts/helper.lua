@@ -57,7 +57,6 @@ function GetCurrentlyEquippedWandKaboom()
     local iSignature = GetInternalVariableValue(GetPlayerEntity(), "held_wand_hash", "value_int")
     local iSeed = tonumber(StatsGetValue("world_seed"))
     local iScale = ModSettingGet("pocketrocketry.kaboomScale") or 3
-    local fSharpness = 2
     SetRandomSeed(iSignature, iSeed)
     if ModSettingGet("pocketrocketry.kaboomDistribution") == "madhouse" then
         local f = Randomf(1, iScale)
@@ -68,6 +67,7 @@ function GetCurrentlyEquippedWandKaboom()
         end
     end
     -- "normal" distribution
+    local fSharpness = tonumber(ModSettingGet("pocketrocketry.kaboomDistribution")) or 1
     return RandomDistributionf(1 / iScale, iScale, 1, fSharpness)
 end
 

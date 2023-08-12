@@ -24,7 +24,7 @@ mod_settings =
 		ui_name = "How wildy wands get modified",
 		ui_description = "Normal for serious runs, madhouse if you don't care for your safety",
 		value_default = "madhouse",
-		values = { { "normal", "Normal" }, { "madhouse", "Madhouse" } },
+		values = { { "2", "Normal" }, { "1", "Varied" }, { "madhouse", "Madhouse" } },
 		scope = MOD_SETTING_SCOPE_RUNTIME,
 	},
 	{
