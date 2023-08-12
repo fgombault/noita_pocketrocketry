@@ -136,9 +136,15 @@ function RenameWand(wand, new_name)
     if potion_component ~= nil and potion_component ~= 0 then return end
 
     local current_name = ComponentGetValue2(item_component, "item_name") or "wand"
+    -- catch the starter wand internal names
+    if (string.find(current_name, "_gun") or
+            string.find(current_name, "_wand")) then
+        current_name = "wand"
+    end
 
     if (new_name == nil or new_name == "") then return end
     if string.lower(new_name) == string.lower(current_name) then return end
+    -- catches "wand_template" used by Thematic Random Starts
     if (string.lower(string.sub(current_name, 1, 4)) == "wand") then
         ComponentSetValue2(item_component, "item_name", new_name)
 
