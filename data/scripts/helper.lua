@@ -135,11 +135,11 @@ function RenameWand(wand, new_name)
     if item_component == nil or item_component == 0 then return end
     if potion_component ~= nil and potion_component ~= 0 then return end
 
-    local current_name = ComponentGetValue2(item_component, "item_name") or ""
+    local current_name = ComponentGetValue2(item_component, "item_name") or "wand"
 
     if (new_name == nil or new_name == "") then return end
     if string.lower(new_name) == string.lower(current_name) then return end
-    if (current_name == "" or current_name == "wand") then
+    if (string.lower(string.sub(current_name, 1, 4)) == "wand") then
         ComponentSetValue2(item_component, "item_name", new_name)
 
         local uses_item_name = ComponentGetValue2(item_component, "always_use_item_name_in_ui")
