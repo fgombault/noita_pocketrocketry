@@ -4,5 +4,5 @@
 - [x] seed in wand signature
 - [x] pseudo wisps
 - [x] rename starter wands too
-- [ ] apply speed modifier immediately
+- [x] apply speed modifier immediately
 - [ ] non immature wand names alternative
