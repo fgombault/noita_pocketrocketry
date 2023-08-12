@@ -124,7 +124,18 @@ end
 function SetWandSpeedMult(iWandID, fSpeedMult)
     local iAbilityComp = EntityGetFirstComponentIncludingDisabled(iWandID, "AbilityComponent")
     if (ComponentGetValue2(iAbilityComp, "use_gun_script") ~= true) then return end
+    local fCurrentSpeedMult = ComponentObjectGetValue2(iAbilityComp, "gunaction_config", "speed_multiplier")
+    if (math.floor(fCurrentSpeedMult * 1000) == math.floor(fSpeedMult * 1000)) then return end
     ComponentObjectSetValue2(iAbilityComp, "gunaction_config", "speed_multiplier", fSpeedMult)
+    -- Refresh the wand if it's being held by the player
+    local iParent = EntityGetRootEntity(iWandID)
+    if EntityHasTag(iParent, "player_unit") then
+        local iInventory2Comp = EntityGetFirstComponentIncludingDisabled(iParent, "Inventory2Component")
+        if iInventory2Comp then
+            ComponentSetValue2(iInventory2Comp, "mForceRefresh", true)
+            ComponentSetValue2(iInventory2Comp, "mActualActiveItem", 0)
+        end
+    end
 end
 
 function RenameWand(wand, new_name)
