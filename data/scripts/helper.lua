@@ -137,7 +137,8 @@ function RenameWand(wand, new_name)
 
     local current_name = ComponentGetValue2(item_component, "item_name") or "wand"
     -- catch the starter wand internal names
-    if (string.find(current_name, "_gun") or
+    if (current_name == "" or
+            string.find(current_name, "_gun") or
             string.find(current_name, "_wand")) then
         current_name = "wand"
     end
