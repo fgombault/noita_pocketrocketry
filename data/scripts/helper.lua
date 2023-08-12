@@ -138,37 +138,37 @@ function SetWandSpeedMult(iWandID, fSpeedMult)
     end
 end
 
-function RenameWand(wand, new_name)
-    local item_component = EntityGetFirstComponentIncludingDisabled(wand, "ItemComponent")
-    local info_component = EntityGetFirstComponentIncludingDisabled(wand, "UIInfoComponent")
-    local potion_component = EntityGetFirstComponentIncludingDisabled(wand, "PotionComponent")
+function RenameWand(iWandID, sNewName)
+    local iItemComp = EntityGetFirstComponentIncludingDisabled(iWandID, "ItemComponent")
+    local iInfoComp = EntityGetFirstComponentIncludingDisabled(iWandID, "UIInfoComponent")
+    local iPotionComp = EntityGetFirstComponentIncludingDisabled(iWandID, "PotionComponent")
 
-    if item_component == nil or item_component == 0 then return end
-    if potion_component ~= nil and potion_component ~= 0 then return end
+    if iItemComp == nil or iItemComp == 0 then return end
+    if iPotionComp ~= nil and iPotionComp ~= 0 then return end
 
-    local current_name = ComponentGetValue2(item_component, "item_name") or "wand"
+    local sCurrentName = ComponentGetValue2(iItemComp, "item_name") or "wand"
     -- catch the starter wand internal names
-    if (current_name == "" or
-            string.find(current_name, "_gun") or
-            string.find(current_name, "_wand")) then
-        current_name = "wand"
+    if (sCurrentName == "" or
+            string.find(sCurrentName, "_gun") or
+            string.find(sCurrentName, "_wand")) then
+        sCurrentName = "wand"
     end
 
-    if (new_name == nil or new_name == "") then return end
-    if string.lower(new_name) == string.lower(current_name) then return end
+    if (sNewName == nil or sNewName == "") then return end
+    if string.lower(sNewName) == string.lower(sCurrentName) then return end
     -- catches "wand_template" used by Thematic Random Starts
-    if (string.lower(string.sub(current_name, 1, 4)) == "wand") then
-        ComponentSetValue2(item_component, "item_name", new_name)
+    if (string.lower(string.sub(sCurrentName, 1, 4)) == "wand") then
+        ComponentSetValue2(iItemComp, "item_name", sNewName)
 
-        local uses_item_name = ComponentGetValue2(item_component, "always_use_item_name_in_ui")
+        local uses_item_name = ComponentGetValue2(iItemComp, "always_use_item_name_in_ui")
         if not uses_item_name then
-            ComponentSetValue2(item_component, "always_use_item_name_in_ui", true)
+            ComponentSetValue2(iItemComp, "always_use_item_name_in_ui", true)
         end
 
-        if info_component ~= 0 and info_component ~= nil then
-            ComponentSetValue2(info_component, "name", new_name)
+        if iInfoComp ~= 0 and iInfoComp ~= nil then
+            ComponentSetValue2(iInfoComp, "name", sNewName)
         end
-        GamePrint("I shall call you: " .. new_name)
+        GamePrint("I shall call you: " .. sNewName)
     end
     -- print("renamed wand: " .. name)
 end
