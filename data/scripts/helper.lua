@@ -145,31 +145,16 @@ function RenameWand(iWandID, sNewName)
 
     if iItemComp == nil or iItemComp == 0 then return end
     if iPotionComp ~= nil and iPotionComp ~= 0 then return end
-
-    local sCurrentName = ComponentGetValue2(iItemComp, "item_name") or "wand"
-    -- catch the starter wand internal names
-    if (sCurrentName == "" or
-            string.find(sCurrentName, "_gun") or
-            string.find(sCurrentName, "_wand")) then
-        sCurrentName = "wand"
-    end
-
     if (sNewName == nil or sNewName == "") then return end
-    if string.lower(sNewName) == string.lower(sCurrentName) then return end
-    -- catches "wand_template" used by Thematic Random Starts
-    if (string.lower(string.sub(sCurrentName, 1, 4)) == "wand") then
-        ComponentSetValue2(iItemComp, "item_name", sNewName)
 
-        local uses_item_name = ComponentGetValue2(iItemComp, "always_use_item_name_in_ui")
-        if not uses_item_name then
-            ComponentSetValue2(iItemComp, "always_use_item_name_in_ui", true)
-        end
-
-        if iInfoComp ~= 0 and iInfoComp ~= nil then
-            ComponentSetValue2(iInfoComp, "name", sNewName)
-        end
+    ComponentSetValue2(iItemComp, "item_name", sNewName)
+    local uses_item_name = ComponentGetValue2(iItemComp, "always_use_item_name_in_ui")
+    if not uses_item_name then
+        ComponentSetValue2(iItemComp, "always_use_item_name_in_ui", true)
     end
-    -- print("renamed wand: " .. name)
+    if iInfoComp ~= 0 and iInfoComp ~= nil then
+        ComponentSetValue2(iInfoComp, "name", sNewName)
+    end
 end
 
 WandNames = { "test1", "test2", "test3", "test4" }
