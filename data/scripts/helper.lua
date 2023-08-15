@@ -158,7 +158,8 @@ function RenameWand(iWandID, sNewName)
 end
 
 WandNames = { "test1", "test2", "test3", "test4" }
-dofile("data/scripts/names.lua")
+local sNameSet = ModSettingGet("pocketrocketry.wandNames") or "funny_names"
+dofile_once("mods/pocketrocketry/data/scripts/" .. sNameSet .. ".lua")
 
 function MapKaboomToRange(fKaboom, iRangeMax)
     SetRandomSeed(fKaboom, 0)

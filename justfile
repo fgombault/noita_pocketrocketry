@@ -3,13 +3,16 @@
 alias tdd := watch
 
 build:
-  echo "WandNames = {" > data/scripts/names.lua
-  cat wand_names/*.txt > names.list
-  sed -ibak -e 's/^/"/' -e 's/$/", /' names.list
-  cat names.list >> data/scripts/names.lua
-  echo "}" >> data/scripts/names.lua
-  rm names.list
-  cat data/scripts/names.lua
+  for f in wand_names/*txt; do \
+  BASE=$(basename -s .txt $f); \
+  echo "WandNames = {" > data/scripts/$BASE.lua; \
+  cat $f > names.list; \
+  sed -ibak -e 's/^/"/' -e 's/$/", /' names.list; \
+  cat names.list >> data/scripts/$BASE.lua; \
+  echo "}" >> data/scripts/$BASE.lua; \
+  rm names.list; \
+  cat data/scripts/$BASE.lua; \
+  done
 
 release: build
   rm -f pocketrocketry.zip

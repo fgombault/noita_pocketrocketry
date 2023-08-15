@@ -11,3 +11,7 @@ Configuration options
 * Wether to also affect damage and projectile speed
 * Give each new wand a unique name
 * What kind of hint the name gives you about its explosive properties
+
+Original mod by Näx
+
+https://steamcommunity.com/sharedfiles/filedetails/?id=2500588596
