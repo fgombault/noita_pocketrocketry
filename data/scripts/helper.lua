@@ -168,7 +168,6 @@ function RenameWand(iWandID, sNewName)
         if iInfoComp ~= 0 and iInfoComp ~= nil then
             ComponentSetValue2(iInfoComp, "name", sNewName)
         end
-        GamePrint("I shall call you: " .. sNewName)
     end
     -- print("renamed wand: " .. name)
 end
