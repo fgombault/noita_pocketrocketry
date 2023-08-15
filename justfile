@@ -12,7 +12,7 @@ build:
   cat data/scripts/names.lua
 
 release: build
-  rm pocketrocketry.zip
+  rm -f pocketrocketry.zip
   mkdir pocketrocketry
   cp -r *xml *lua mod_id.txt data pocketrocketry/
   zip pocketrocketry.zip -r pocketrocketry/ 
