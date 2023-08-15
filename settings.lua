@@ -7,15 +7,15 @@ mod_settings =
 {
 	{
 		id = "kaboomDistribution",
-		ui_name = "How wildy wands get modified",
+		ui_name = "Distribution curve",
 		ui_description = "Normal for serious runs, madhouse if you don't care for your safety",
 		value_default = "madhouse",
-		values = { { "2", "Normal" }, { "1", "Varied" }, { "madhouse", "Madhouse" } },
+		values = { { "1.5", "Narrow" }, { "0.8", "Varied" }, { "madhouse", "Madhouse" } },
 		scope = MOD_SETTING_SCOPE_RUNTIME,
 	},
 	{
 		id = "kaboomScale",
-		ui_name = "Modification scale",
+		ui_name = "Maximum scaling",
 		ui_description = "Maximum multiplier of explosion radius",
 		value_default = 3,
 		value_min = 1,
@@ -27,7 +27,7 @@ mod_settings =
 	{
 		id = "modificationType",
 		ui_name = "Wand modification type",
-		ui_description = "Choose which attributes get modified",
+		ui_description = "Which attributes get modified",
 		value_default = "full",
 		values = { { "explosion only", "Explosion radius only" },
 			{ "full",           "Explosion radius, damage and speed" },
