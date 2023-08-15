@@ -5,20 +5,6 @@ local mod_id = "pocketrocketry" -- This should match the name of your mod's fold
 mod_settings_version = 1        -- This is a magic global that can be used to migrate settings to new mod versions. call mod_settings_get_version() before mod_settings_update() to get the old value.
 mod_settings =
 {
-	-- {
-	-- 	id = "_",
-	-- 	ui_name = "(Confused or want more info? Check out the mod's wiki page at noita.wiki.gg/Mods!)",
-	-- 	not_setting = true,
-	-- },
-	-- {
-	-- 	id = "pacifist",
-	-- 	ui_name = "Pacifist chest replacement",
-	-- 	ui_description = "Should the pacifist chest always be replaced with a Mini Treasure Chest?",
-	-- 	value_default = "yes",
-	-- 	values = { { "yes", "Yes" }, { "no", "No" } },
-	-- 	scope = MOD_SETTING_SCOPE_RUNTIME,
-	-- 	change_fn = mod_setting_change_callback, -- Called when the user interact with the settings widget.
-	-- },
 	{
 		id = "kaboomDistribution",
 		ui_name = "How wildy wands get modified",
