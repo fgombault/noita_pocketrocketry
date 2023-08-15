@@ -5,4 +5,4 @@
 - [x] pseudo wisps
 - [x] rename starter wands too
 - [x] apply speed modifier immediately
-- [ ] non immature wand names alternative
+- [x] non immature wand names alternative
